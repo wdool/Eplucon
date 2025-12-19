@@ -1,11 +1,17 @@
 {
   "name": "nl.eplucon.homey",
   "version": "1.0.0",
+  "description": "Eplucon Ecoforest Heat Pump App for Homey",
   "main": "app.js",
-  "dependencies": {
-    "node-fetch": "^2.6.1"
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "devDependencies": {
-    "homey": "^2.30.0"
+  "author": "Wout van den Dool <woutdool@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "node-fetch": "^2.6.7"
+  },
+  "engines": {
+    "node": ">=12.0.0"
   }
 }
