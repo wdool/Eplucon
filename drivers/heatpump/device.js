@@ -24,10 +24,10 @@ class HeatPumpDevice extends Homey.Device {
 
       this.log('Received stats:', JSON.stringify(stats));
 
-      // Map Data Points
+      // Map Data Points including new Energy fields
       const map = {
         'measure_temperature.indoor': stats['Binnentemperatuur'],
-        'measure_temperature.outdoor': stats['Buitentemp.'], // Note the dot
+        'measure_temperature.outdoor': stats['Buitentemp.'],
         'measure_temperature.hotwater': stats['WW temperatuur'],
         'measure_temperature.dg1': stats['Actuele temp. DG1'],
         'measure_temperature.brine_in': stats['Brine in temperatuur'],
@@ -35,7 +35,9 @@ class HeatPumpDevice extends Homey.Device {
         'measure_temperature.heating_in': stats['Heating in temperatuur'],
         'measure_temperature.heating_out': stats['Heating out temperatuur'],
         'measure_pressure': stats['Cv druk'],
-        'measure_power': stats['Actueel verbruik']
+        'measure_power': stats['Actueel verbruik'],
+        'meter_power': stats['Totaal import energie'],
+        'meter_power.produced': stats['Totaal geproduceerde energie']
       };
 
       for (const [capability, value] of Object.entries(map)) {

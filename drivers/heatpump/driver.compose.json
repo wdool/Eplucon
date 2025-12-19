@@ -14,40 +14,23 @@
     "measure_temperature.heating_in",
     "measure_temperature.heating_out",
     "measure_pressure",
-    "measure_power"
+    "measure_power",
+    "meter_power",
+    "meter_power.produced"
   ],
   "capabilitiesOptions": {
-    "measure_temperature.indoor": {
-      "title": { "en": "Indoor Temperature", "nl": "Binnentemperatuur" }
-    },
-    "measure_temperature.outdoor": {
-      "title": { "en": "Outdoor Temperature", "nl": "Buitentemperatuur" }
-    },
-    "measure_temperature.hotwater": {
-      "title": { "en": "Hot Water Temperature", "nl": "WW Temperatuur" }
-    },
-    "measure_temperature.dg1": {
-      "title": { "en": "Actual Temp DG1", "nl": "Actuele temp. DG1" }
-    },
-    "measure_temperature.brine_in": {
-      "title": { "en": "Brine In", "nl": "Brine In" }
-    },
-    "measure_temperature.brine_out": {
-      "title": { "en": "Brine Out", "nl": "Brine Uit" }
-    },
-    "measure_temperature.heating_in": {
-      "title": { "en": "Heating In", "nl": "Verwarming In" }
-    },
-    "measure_temperature.heating_out": {
-      "title": { "en": "Heating Out", "nl": "Verwarming Uit" }
-    },
-    "measure_pressure": {
-      "title": { "en": "Pressure", "nl": "Druk" },
-      "units": { "en": "bar" }
-    },
-    "measure_power": {
-      "title": { "en": "Power Consumption", "nl": "Actueel Verbruik" }
-    }
+    "measure_temperature.indoor": { "title": { "en": "Indoor Temperature", "nl": "Binnentemperatuur" } },
+    "measure_temperature.outdoor": { "title": { "en": "Outdoor Temperature", "nl": "Buitentemperatuur" } },
+    "measure_temperature.hotwater": { "title": { "en": "Hot Water", "nl": "WW Temperatuur" } },
+    "measure_temperature.dg1": { "title": { "en": "Actual Temp DG1", "nl": "Actuele temp. DG1" } },
+    "measure_temperature.brine_in": { "title": { "en": "Brine In", "nl": "Brine In" } },
+    "measure_temperature.brine_out": { "title": { "en": "Brine Out", "nl": "Brine Uit" } },
+    "measure_temperature.heating_in": { "title": { "en": "Heating In", "nl": "Verwarming In" } },
+    "measure_temperature.heating_out": { "title": { "en": "Heating Out", "nl": "Verwarming Uit" } },
+    "measure_pressure": { "title": { "en": "Pressure", "nl": "Druk" }, "units": { "en": "bar" } },
+    "measure_power": { "title": { "en": "Current Power", "nl": "Actueel Verbruik" } },
+    "meter_power": { "title": { "en": "Total Import Energy", "nl": "Totaal Import Energie" } },
+    "meter_power.produced": { "title": { "en": "Total Produced Energy", "nl": "Totaal Geproduceerd" } }
   },
   "images": {
     "large": "drivers/heatpump/assets/images/large.png",
