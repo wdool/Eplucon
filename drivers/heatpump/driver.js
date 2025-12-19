@@ -45,19 +45,31 @@ class HeatPumpDriver extends Homey.Driver {
       }
     });
 
-    // Handle list_devices step
     session.setHandler('list_devices', async () => {
-      this.log('Pairing: List devices');
+      this.log('=== Pairing: List Devices Handler ===');
       const api = this.homey.app.api;
-      const modules = await api.getModules(); // Assumes getModules returns array
       
-      // Map modules to Homey device objects
-      return modules.map(mod => ({
-        name: mod.name || `Heat Pump ${mod.id}`,
-        data: {
-          id: mod.id
-        }
-      }));
+      try {
+        const modules = await api.getModules();
+        this.log(`Received ${modules.length} modules`);
+        
+        const devices = modules.map(mod => {
+          this.log(`Mapping module: id=${mod.id}, name=${mod.name}`);
+          return {
+            name: mod.name || `Heat Pump ${mod.id}`,
+            data: {
+              id: String(mod.id)
+            }
+          };
+        });
+        
+        this.log(`Returning ${devices.length} devices to Homey`);
+        return devices;
+      } catch (err) {
+        this.error('=== List Devices Error ===');
+        this.error(`Error: ${err.message}`);
+        throw err;
+      }
     });
   }
 
