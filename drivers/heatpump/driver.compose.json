@@ -24,7 +24,7 @@
     "measure_temperature.brine_out": { "title": { "en": "Brine Out", "nl": "Brine Uit" } },
     "measure_temperature.heating_in": { "title": { "en": "Heating In", "nl": "Verwarming In" } },
     "measure_temperature.heating_out": { "title": { "en": "Heating Out", "nl": "Verwarming Uit" } },
-    "measure_pressure": { "title": { "en": "Pressure", "nl": "Druk" }, "units": { "en": "bar" } },
+    "measure_pressure": { "title": { "en": "Pressure", "nl": "CV Druk" }, "units": { "en": "bar" }, "decimals": 2 },
     "measure_temperature.outdoor": { "title": { "en": "Outdoor Temperature", "nl": "Buitentemperatuur" } }
   },
   "images": {
