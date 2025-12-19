@@ -4,8 +4,10 @@ class HeatPumpDevice extends Homey.Device {
 
   async onInit() {
     this.log('HeatPumpDevice initialized');
-    // Poll every 1 minute
-    this.pollingInterval = this.homey.setInterval(this.pollData.bind(this), 60000);
+    this.pollCount = 0;
+    
+    // Poll real-time stats every 5 minutes (300000ms)
+    this.pollingInterval = this.homey.setInterval(this.pollData.bind(this), 300000);
     await this.pollData();
   }
 
@@ -18,18 +20,22 @@ class HeatPumpDevice extends Homey.Device {
   async pollData() {
     try {
       const api = this.homey.app.api;
+      this.pollCount++;
       
-      // Parallel fetch for standard stats and monthly energy stats
-      const [stats, energyStats] = await Promise.all([
-        api.getStatistics().catch(err => {
-          this.error('Stats Error:', err);
+      // Always fetch real-time stats
+      const stats = await api.getStatistics().catch(err => {
+        this.error('Stats Error:', err.message);
+        return null;
+      });
+      
+      // Only fetch monthly energy stats every 12 polls (once per hour)
+      let energyStats = null;
+      if (this.pollCount % 12 === 1) {
+        energyStats = await api.getPreviousMonthEnergyStatistics().catch(err => {
+          this.error('Energy Stats Error:', err.message);
           return null;
-        }),
-        api.getPreviousMonthEnergyStatistics().catch(err => {
-          this.error('Energy Stats Error:', err);
-          return null;
-        })
-      ]);
+        });
+      }
       
       if (stats) {
         // Map standard stats
