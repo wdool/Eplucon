@@ -6,9 +6,37 @@ class HeatPumpDevice extends Homey.Device {
     this.log('HeatPumpDevice initialized');
     this.pollCount = 0;
     
-    // Poll real-time stats every 5 minutes (300000ms)
-    this.pollingInterval = this.homey.setInterval(this.pollData.bind(this), 300000);
+    // Restore credentials from store and re-authenticate
+    await this.restoreSession();
+    
+    // Poll real-time stats every 60 seconds (60000ms)
+    this.pollingInterval = this.homey.setInterval(this.pollData.bind(this), 60000);
     await this.pollData();
+  }
+
+  async restoreSession() {
+    try {
+      const username = this.getStoreValue('username');
+      const password = this.getStoreValue('password');
+      const moduleId = this.getStoreValue('moduleId');
+      
+      if (username && password) {
+        this.log('Restoring session with stored credentials...');
+        const api = this.homey.app.api;
+        await api.login(username, password);
+        
+        if (moduleId) {
+          api.moduleId = moduleId;
+          this.log(`Restored module ID: ${moduleId}`);
+        }
+        
+        this.log('Session restored successfully');
+      } else {
+        this.error('No stored credentials found');
+      }
+    } catch (error) {
+      this.error('Failed to restore session:', error.message);
+    }
   }
 
   onDeleted() {

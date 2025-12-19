@@ -33,6 +33,11 @@ class HeatPumpDriver extends Homey.Driver {
         
         if (api.token) {
           this.log('Login successful, token present');
+          // Store credentials for use in list_devices
+          this.pairingCredentials = {
+            username: data.username,
+            password: data.password
+          };
           return true; 
         } else {
           this.error('Login returned but no token present');
@@ -59,6 +64,11 @@ class HeatPumpDriver extends Homey.Driver {
             name: mod.name || `Heat Pump ${mod.id}`,
             data: {
               id: String(mod.id)
+            },
+            store: {
+              username: this.pairingCredentials.username,
+              password: this.pairingCredentials.password,
+              moduleId: mod.id
             }
           };
         });
