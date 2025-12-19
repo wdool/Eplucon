@@ -19,34 +19,30 @@ class HeatPumpDevice extends Homey.Device {
     try {
       const api = this.homey.app.api;
       
-      // Parallel fetch for standard stats and energy stats
+      // Parallel fetch for standard stats and monthly energy stats
       const [stats, energyStats] = await Promise.all([
         api.getStatistics().catch(err => {
           this.error('Stats Error:', err);
           return null;
         }),
-        api.getEnergyStatistics().catch(err => {
+        api.getPreviousMonthEnergyStatistics().catch(err => {
           this.error('Energy Stats Error:', err);
           return null;
         })
       ]);
       
       if (stats) {
-        this.log('Received stats');
         // Map standard stats
         const map = {
           'measure_temperature.indoor': stats['Binnentemperatuur'],
-          'measure_temperature.outdoor': stats['Buitentemp.'],
           'measure_temperature.hotwater': stats['WW temperatuur'],
-          'measure_temperature.dg1': stats['Actuele temp. DG1'],
           'measure_temperature.brine_in': stats['Brine in temperatuur'],
           'measure_temperature.brine_out': stats['Brine out temperatuur'],
           'measure_temperature.heating_in': stats['Heating in temperatuur'],
           'measure_temperature.heating_out': stats['Heating out temperatuur'],
           'measure_pressure': stats['Cv druk'],
-          'measure_power': stats['Actueel verbruik'],
-          'meter_power': stats['Totaal import energie'],
-          'meter_power.produced': stats['Totaal geproduceerde energie']
+          'measure_temperature.outdoor': stats['Buitentemp.'],
+          'meter_power': stats['Totaal import energie']
         };
 
         for (const [capability, value] of Object.entries(map)) {
@@ -62,12 +58,10 @@ class HeatPumpDevice extends Homey.Device {
       }
 
       if (energyStats) {
-        this.log('Received energy stats');
-        // Map energy stats (Daily values)
+        // Map energy stats (Monthly values)
         const energyMap = {
-          'meter_power.daily_consumed': energyStats['consumed_energy'],
-          'meter_power.daily_heat': energyStats['delivered_heat'],
-          'meter_power.daily_cooling': energyStats['delivered_cooling']
+          'meter_power.month_consumed': energyStats['consumed_energy'],
+          'meter_power.month_heat': energyStats['delivered_heat']
         };
 
         for (const [capability, value] of Object.entries(energyMap)) {
