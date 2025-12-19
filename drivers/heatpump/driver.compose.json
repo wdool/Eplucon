@@ -1,0 +1,42 @@
+{
+  "name": {
+    "en": "Ecoforest Heat Pump",
+    "nl": "Ecoforest Warmtepomp"
+  },
+  "class": "thermostat",
+  "capabilities": [
+    "measure_temperature.indoor",
+    "measure_temperature.outdoor",
+    "measure_pressure",
+    "measure_power",
+    "meter_power"
+  ],
+  "capabilitiesOptions": {
+    "measure_pressure": {
+      "title": {
+        "en": "Pressure",
+        "nl": "Druk"
+      },
+      "units": {
+        "en": "bar"
+      }
+    }
+  },
+  "images": {
+    "large": "drivers/heatpump/assets/images/large.png",
+    "small": "drivers/heatpump/assets/images/small.png"
+  },
+  "pair": [
+    {
+      "id": "login",
+      "template": "login_credentials"
+    },
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+        "next": "add_devices"
+      }
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "name": "nl.eplucon.homey",
+  "version": "1.0.0",
+  "main": "app.js",
+  "dependencies": {
+    "node-fetch": "^2.6.1"
+  },
+  "devDependencies": {
+    "homey": "^2.30.0"
+  }
+}

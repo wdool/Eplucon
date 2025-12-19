@@ -1,0 +1,32 @@
+{
+  "id": "nl.eplucon.homey",
+  "version": "1.0.0",
+  "compatibility": ">=10.0.0",
+  "sdk": 3,
+  "name": {
+    "en": "Eplucon Heat Pump",
+    "nl": "Eplucon Warmtepomp"
+  },
+  "description": {
+    "en": "Monitor and control your Eplucon Ecoforest Heat Pump",
+    "nl": "Monitor en bedien je Eplucon Ecoforest Warmtepomp"
+  },
+  "category": [
+    "appliances"
+  ],
+  "permissions": [
+    "homey:manager:api"
+  ],
+  "images": {
+    "large": "assets/images/large.png",
+    "small": "assets/images/small.png"
+  },
+  "brandColor": "#000000",
+  "author": {
+    "name": "Wout van den Dool",
+    "email": "woutdool@gmail.com"
+  },
+  "contributing": {
+    "donate": {}
+  }
+}
