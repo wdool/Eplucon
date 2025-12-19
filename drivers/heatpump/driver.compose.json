@@ -34,13 +34,16 @@
   "pair": [
     {
       "id": "login",
-      "template": "login_credentials"
+      "template": "login_credentials",
+      "navigation": {
+        "next": "list_devices"
+      }
     },
     {
       "id": "list_devices",
       "template": "list_devices",
       "navigation": {
-        "next": "add_devices"
+        "prev": "login"
       }
     }
   ]
