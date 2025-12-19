@@ -1,6 +1,9 @@
 <svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="512" height="512" rx="120" fill="#000000"/>
-  <path d="M256 120C180.88 120 120 180.88 120 256C120 331.12 180.88 392 256 392C331.12 392 392 331.12 392 256C392 180.88 331.12 120 256 120ZM256 352C202.98 352 160 309.02 160 256C160 202.98 202.98 160 256 160C309.02 160 352 202.98 352 256C352 309.02 309.02 352 256 352Z" fill="white"/>
-  <path d="M256 180V230" stroke="white" stroke-width="20" stroke-linecap="round"/>
-  <circle cx="256" cy="256" r="40" fill="#10B981"/> 
+  <circle cx="256" cy="256" r="256" fill="#000000"/>
+  <!-- Stylized Heat Pump in White -->
+  <rect x="120" y="100" width="90" height="312" rx="8" fill="white"/>
+  <rect x="230" y="100" width="162" height="80" rx="8" fill="white"/>
+  <rect x="230" y="200" width="162" height="212" rx="8" fill="white"/>
+  <!-- Green Logo Element -->
+  <path d="M311 340L341 390H281L311 340Z" fill="#000000"/>
 </svg>
