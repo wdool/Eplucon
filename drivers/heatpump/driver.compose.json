@@ -42,8 +42,8 @@
     {
       "id": "list_devices",
       "template": "list_devices",
-      "navigation": {
-        "prev": "login"
+      "options": {
+        "singular": true
       }
     }
   ]
