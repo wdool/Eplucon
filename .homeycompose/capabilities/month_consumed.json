@@ -1,0 +1,14 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Prev. Month Consumed",
+    "nl": "Verbruik Vorige Maand"
+  },
+  "units": {
+    "en": "kWh"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "icon": "/assets/capabilities/electricity.svg"
+}

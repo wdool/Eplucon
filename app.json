@@ -18,47 +18,6 @@
   "permissions": [
     "homey:manager:api"
   ],
-  "capabilities": {
-    "month_consumed": {
-      "type": "number",
-      "title": {
-        "en": "Prev. Month Consumed",
-        "nl": "Verbruik Vorige Maand"
-      },
-      "units": {
-        "en": "kWh"
-      },
-      "getable": true,
-      "setable": false,
-      "icon": "assets/capabilities/electricity.svg"
-    },
-    "month_heat": {
-      "type": "number",
-      "title": {
-        "en": "Prev. Month Heat",
-        "nl": "Warmte Vorige Maand"
-      },
-      "units": {
-        "en": "kWh"
-      },
-      "getable": true,
-      "setable": false,
-      "icon": "assets/capabilities/fire.svg"
-    },
-    "month_cooling": {
-      "type": "number",
-      "title": {
-        "en": "Prev. Month Cooling",
-        "nl": "Koeling Vorige Maand"
-      },
-      "units": {
-        "en": "kWh"
-      },
-      "getable": true,
-      "setable": false,
-      "icon": "assets/capabilities/snowflake.svg"
-    }
-  },
   "images": {
     "large": "assets/images/large.png",
     "small": "assets/images/small.png"

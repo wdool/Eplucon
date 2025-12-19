@@ -1,0 +1,14 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Prev. Month Cooling",
+    "nl": "Koeling Vorige Maand"
+  },
+  "units": {
+    "en": "kWh"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "icon": "/assets/capabilities/snowflake.svg"
+}
