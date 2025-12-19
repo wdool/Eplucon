@@ -41,8 +41,7 @@ class HeatPumpDevice extends Homey.Device {
           'measure_temperature.heating_in': stats['Heating in temperatuur'],
           'measure_temperature.heating_out': stats['Heating out temperatuur'],
           'measure_pressure': stats['Cv druk'],
-          'measure_temperature.outdoor': stats['Buitentemp.'],
-          'meter_power': stats['Totaal import energie']
+          'measure_temperature.outdoor': stats['Buitentemp.']
         };
 
         for (const [capability, value] of Object.entries(map)) {
@@ -59,9 +58,11 @@ class HeatPumpDevice extends Homey.Device {
 
       if (energyStats) {
         // Map energy stats (Monthly values)
+        // Using custom capabilities defined in app.json
         const energyMap = {
-          'meter_power.month_consumed': energyStats['consumed_energy'],
-          'meter_power.month_heat': energyStats['delivered_heat']
+          'month_consumed': energyStats['consumed_energy'],
+          'month_heat': energyStats['delivered_heat'],
+          'month_cooling': energyStats['delivered_cooling']
         };
 
         for (const [capability, value] of Object.entries(energyMap)) {

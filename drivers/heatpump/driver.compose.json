@@ -13,9 +13,9 @@
     "measure_temperature.heating_out",
     "measure_pressure",
     "measure_temperature.outdoor",
-    "meter_power",
-    "meter_power.month_consumed",
-    "meter_power.month_heat"
+    "month_consumed",
+    "month_heat",
+    "month_cooling"
   ],
   "capabilitiesOptions": {
     "measure_temperature.indoor": { "title": { "en": "Indoor Temperature", "nl": "Binnentemperatuur" } },
@@ -25,10 +25,7 @@
     "measure_temperature.heating_in": { "title": { "en": "Heating In", "nl": "Verwarming In" } },
     "measure_temperature.heating_out": { "title": { "en": "Heating Out", "nl": "Verwarming Uit" } },
     "measure_pressure": { "title": { "en": "Pressure", "nl": "Druk" }, "units": { "en": "bar" } },
-    "measure_temperature.outdoor": { "title": { "en": "Outdoor Temperature", "nl": "Buitentemperatuur" } },
-    "meter_power": { "title": { "en": "Total Import Energy", "nl": "Totaal Import Energie" } },
-    "meter_power.month_consumed": { "title": { "en": "Previous Month Consumed", "nl": "Verbruik Vorige Maand" }, "units": { "en": "kWh" } },
-    "meter_power.month_heat": { "title": { "en": "Previous Month Heat Delivered", "nl": "Warmte Vorige Maand" }, "units": { "en": "kWh" } }
+    "measure_temperature.outdoor": { "title": { "en": "Outdoor Temperature", "nl": "Buitentemperatuur" } }
   },
   "images": {
     "large": "drivers/heatpump/assets/images/large.png",
