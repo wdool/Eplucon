@@ -2,68 +2,57 @@ const Homey = require('homey');
 
 class HeatPumpDevice extends Homey.Device {
 
-  /**
-   * onInit is called when the device is initialized.
-   */
   async onInit() {
-    this.log('HeatPumpDevice has been initialized');
-    this.log('Device Name:', this.getName());
-    this.log('Device Data:', this.getData());
-
-    // Set polling interval (e.g., every minute)
+    this.log('HeatPumpDevice initialized');
+    // Poll every 1 minute
     this.pollingInterval = this.homey.setInterval(this.pollData.bind(this), 60000);
-    
-    // Initial poll
     await this.pollData();
   }
 
-  /**
-   * onDeleted is called when the device is deleted.
-   */
   onDeleted() {
-    this.log('HeatPumpDevice has been deleted');
     if (this.pollingInterval) {
       this.homey.clearInterval(this.pollingInterval);
     }
   }
 
-  /**
-   * Helper to fetch data and update capabilities
-   */
   async pollData() {
     try {
       const api = this.homey.app.api;
-      // Ensure we have a token (might need re-login logic in real app)
-      
       const stats = await api.getStatistics();
       
-      if (stats) {
-        // Map API fields to Capabilities
-        // Binnentemperatuur -> measure_temperature.indoor
-        if (stats.Binnentemperatuur) {
-           await this.setCapabilityValue('measure_temperature.indoor', parseFloat(stats.Binnentemperatuur)).catch(this.error);
-        }
-        
-        // Buitentemp -> measure_temperature.outdoor
-        if (stats['Buitentemp.']) {
-           await this.setCapabilityValue('measure_temperature.outdoor', parseFloat(stats['Buitentemp.'])).catch(this.error);
-        }
-        
-        // Cv druk -> measure_pressure
-        if (stats['Cv druk']) {
-           await this.setCapabilityValue('measure_pressure', parseFloat(stats['Cv druk'])).catch(this.error);
-        }
-        
-        // Actueel verbruik -> measure_power
-        if (stats['Actueel verbruik']) {
-           await this.setCapabilityValue('measure_power', parseFloat(stats['Actueel verbruik'])).catch(this.error);
-        }
+      if (!stats) return;
 
-        this.log('Data polled successfully');
+      this.log('Received stats:', JSON.stringify(stats));
+
+      // Map Data Points
+      const map = {
+        'measure_temperature.indoor': stats['Binnentemperatuur'],
+        'measure_temperature.outdoor': stats['Buitentemp.'], // Note the dot
+        'measure_temperature.hotwater': stats['WW temperatuur'],
+        'measure_temperature.dg1': stats['Actuele temp. DG1'],
+        'measure_temperature.brine_in': stats['Brine in temperatuur'],
+        'measure_temperature.brine_out': stats['Brine out temperatuur'],
+        'measure_temperature.heating_in': stats['Heating in temperatuur'],
+        'measure_temperature.heating_out': stats['Heating out temperatuur'],
+        'measure_pressure': stats['Cv druk'],
+        'measure_power': stats['Actueel verbruik']
+      };
+
+      for (const [capability, value] of Object.entries(map)) {
+        if (value !== undefined && value !== null) {
+          const parsedValue = parseFloat(value);
+          if (!isNaN(parsedValue)) {
+            // Only update if changed to save resources/bandwidth
+            if (this.getCapabilityValue(capability) !== parsedValue) {
+               await this.setCapabilityValue(capability, parsedValue).catch(this.error);
+            }
+          }
+        }
       }
+
     } catch (error) {
       this.error('Error polling data:', error);
-      // set unavailable if persistent?
+      await this.setUnavailable(error.message).catch(this.error);
     }
   }
 
