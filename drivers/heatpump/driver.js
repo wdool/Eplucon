@@ -15,22 +15,33 @@ class HeatPumpDriver extends Homey.Driver {
   async onPair(session) {
     this.log('Pairing session started');
     
-    // Handle login step
     session.setHandler('login', async (data) => {
-      this.log('Pairing: Login attempt');
+      this.log('=== Pairing: Login Handler ===');
+      this.log(`Received data keys: ${Object.keys(data).join(', ')}`);
+      this.log(`Username from form: ${data.username}`);
+      this.log(`Password provided: ${data.password ? 'yes' : 'no'}`);
+      
       const api = this.homey.app.api;
+      
+      if (!api) {
+        this.error('ERROR: api object is null/undefined');
+        throw new Error('API not initialized');
+      }
+      
       try {
         await api.login(data.username, data.password);
         
-        // IMPORTANT: Check isAuthenticated, not password existence
         if (api.token) {
+          this.log('Login successful, token present');
           return true; 
         } else {
+          this.error('Login returned but no token present');
           throw new Error('Authentication failed (No token)');
         }
       } catch (err) {
-        this.error(err);
-        throw new Error('Invalid credentials');
+        this.error('=== Login Handler Error ===');
+        this.error(`Error: ${err.message}`);
+        throw new Error(`Login failed: ${err.message}`);
       }
     });
 
