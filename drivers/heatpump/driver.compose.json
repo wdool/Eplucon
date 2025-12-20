@@ -3,7 +3,7 @@
     "en": "Ecoforest Heat Pump",
     "nl": "Ecoforest Warmtepomp"
   },
-  "class": "heater",
+  "class": "heatpump",
   "capabilities": [
     "heatpump_status",
     "measure_temperature.indoor",
