@@ -5,7 +5,6 @@
   },
   "class": "heatpump",
   "capabilities": [
-    "heatpump_status",
     "measure_temperature.indoor",
     "measure_temperature.hotwater",
     "measure_temperature.brine_in",
