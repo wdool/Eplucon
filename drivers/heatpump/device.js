@@ -6,6 +6,12 @@ class HeatPumpDevice extends Homey.Device {
     this.log('HeatPumpDevice initialized');
     this.pollCount = 0;
     
+    // Register status capability listener for user changes
+    this.registerCapabilityListener('heatpump_status', async (value) => {
+      this.log(`Status manually set to: ${value}`);
+      return true;
+    });
+    
     // Restore credentials from store and re-authenticate
     await this.restoreSession();
     
