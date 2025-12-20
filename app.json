@@ -19,8 +19,8 @@
     "homey:manager:api"
   ],
   "images": {
-    "large": "assets/images/large.svg",
-    "small": "assets/images/small.svg"
+    "large": "assets/images/large.png",
+    "small": "assets/images/small.png"
   },
   "brandColor": "#1E88E5",
   "author": {
