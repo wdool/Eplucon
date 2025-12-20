@@ -72,6 +72,7 @@ homey app install
 
 ## Support
 
+- Community: [Homey Community Forum](https://community.homey.app/t/app-pro-eplucon-ecoforest-warmtepomp/147455)
 - Issues: [GitHub Issues](https://github.com/woutdool/homey-eplucon/issues)
 - Email: woutdool@gmail.com
 
