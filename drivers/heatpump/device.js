@@ -122,6 +122,14 @@ class HeatPumpDevice extends Homey.Device {
       }
       
       if (stats) {
+        // DEBUG: Log all available API fields (remove after fixing mappings)
+        if (this.pollCount <= 2) {
+          this.log('=== API Statistics Fields ===');
+          this.log(JSON.stringify(Object.keys(stats), null, 2));
+          this.log('=== Full Stats Object ===');
+          this.log(JSON.stringify(stats, null, 2));
+        }
+
         const numberCapabilities = {
           'measure_temperature.indoor': stats['Binnentemperatuur'],
           'target_temperature': stats['Ingestelde binnentemperatuur'],
