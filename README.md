@@ -4,12 +4,14 @@ Monitor your Eplucon Ecoforest Heat Pump directly from your Homey smart home hub
 
 ## Features
 
-- **30 real-time sensors** from the Eplucon Portal API
+- **47 real-time sensors** matching the Home Assistant integration
 - Temperature monitoring (indoor, outdoor, hot water, brine, heating, refrigerant)
+- DG1 and Smart Grid signals (SG2, SG3, SG4)
 - Hot water production status and settings
 - Energy statistics (current power, import/export totals, monthly stats)
 - Pressure monitoring (CV, brine, refrigerant)
-- Compressor and ventilator status
+- Operating hours and compressor starts
+- Alarm status monitoring
 - Automatic polling every 60 seconds
 - Flow card support for automations
 
@@ -49,58 +51,83 @@ homey app run
 homey app install
 ```
 
-## Capabilities (30 Total)
+## Capabilities (47 Total)
 
 ### Temperature Sensors (12)
 | Capability | API Field | Unit |
 |------------|-----------|------|
-| Indoor Temperature | Binnentemperatuur | °C |
-| Target Temperature | Ingestelde ruimte Temp. | °C |
-| Outdoor Temperature | Buitentemp. | °C |
-| Hot Water Temperature | WW temperatuur | °C |
-| WW Configured | Ingestelde temp. WW | °C |
-| Brine In | Brine in temperatuur | °C |
-| Brine Out | Brine out temperatuur | °C |
-| Heating In | Heating in temperatuur | °C |
-| Heating Out | Heating out temperatuur | °C |
-| Condensation Temperature | Condensatie temp. | °C |
-| Evaporation Temperature | Verdamping temp. | °C |
-| Inverter Temperature | Inverter temperatuur | °C |
+| Indoor Temperature | indoor_temperature | C |
+| Target Temperature | configured_indoor_temperature | C |
+| Outdoor Temperature | outdoor_temperature | C |
+| Hot Water Temperature | ww_temperature | C |
+| WW Configured | ww_temperature_configured | C |
+| Brine In | brine_in_temperature | C |
+| Brine Out | brine_out_temperature | C |
+| Heating In | heating_in_temperature | C |
+| Heating Out | heating_out_temperature | C |
+| Condensation Temperature | condensation_temperature | C |
+| Evaporation Temperature | evaporation_temperature | C |
+| Inverter Temperature | inverter_temperature | C |
 
 ### Pressure Sensors (4)
 | Capability | API Field | Unit |
 |------------|-----------|------|
-| CV Pressure | Cv druk | bar |
-| Brine Pressure | Brine druk | bar |
-| Press Gas Pressure | Compressorafvoerdruk | bar |
-| Suction Gas Pressure | Compressorzuigdruk | bar |
+| CV Pressure | cv_pressure | bar |
+| Brine Pressure | brine_pressure | bar |
+| Press Gas Pressure | press_gas_pressure | bar |
+| Suction Gas Pressure | suction_gas_pressure | bar |
 
 ### Refrigerant Sensors (4)
 | Capability | API Field | Unit |
 |------------|-----------|------|
-| Press Gas Temperature | Pers gas temperatuur | °C |
-| Suction Gas Temperature | Zuig gas temperatuur | °C |
-| Overheating | Oververhitting | K |
-| Expansion Valve Position | Positie expansie ventiel | % |
+| Press Gas Temperature | press_gas_temperature | C |
+| Suction Gas Temperature | suction_gas_temperature | C |
+| Overheating | overheating | K |
+| Expansion Valve Position | position_expansion_ventil | % |
 
-### Operational Sensors (2)
+### Smart Grid & DG1 Signals (4)
+| Capability | API Field |
+|------------|-----------|
+| DG1 Active | dg1 |
+| SG2 | sg2 |
+| SG3 | sg3 |
+| SG4 | sg4 |
+
+### Operational Sensors (6)
 | Capability | API Field | Unit |
 |------------|-----------|------|
-| Compressor Speed | Compressor toerental | RPM |
-| Vent RPM | Act. vent. toerental | RPM |
+| Compressor Speed | compressor_speed | RPM |
+| Operating Hours | operating_hours | hours |
+| Number of Starts | number_of_starts | count |
+| Vent RPM | act_vent_rpm | RPM |
+| Brine Pump | brine_circulation_pump | % |
+| Production Pump | production_circulation_pump | % |
+
+### Mode & Status (6)
+| Capability | API Field |
+|------------|-----------|
+| Operation Mode | operation_mode |
+| Heating Mode | heating_mode |
+| Heating State | current_heating_state |
+| Heating Pump State | current_heating_pump_state |
+| Alarm Active | alarm_active |
+| Active WW Request | active_requests_ww |
 
 ### Hot Water Status (2)
 | Capability | API Field |
 |------------|-----------|
-| Active WW Request | WW (1=on) |
-| Warm Water Active | WW (1=on) |
+| Warm Water | warmwater |
+| Domestic Hot Water | warmwater |
 
-### Energy Sensors (3)
+### Energy Sensors (6)
 | Capability | API Field | Unit |
 |------------|-----------|------|
-| Total Active Power | Actueel verbruik | W |
-| Import Energy | Totaal import energie | kWh |
-| Export Energy | Totaal geproduceerde energie | kWh |
+| Total Active Power | total_active_power | W |
+| Energy Delivered | energy_delivered | kWh |
+| Energy Usage | energy_usage | kWh |
+| Import Energy | import_energy | kWh |
+| Export Energy | export_energy | kWh |
+| SPF | spf | ratio |
 
 ### Monthly Energy Statistics (3)
 | Capability | Description | Unit |
@@ -109,17 +136,29 @@ homey app install
 | Monthly Heat | Previous month heat delivered | kWh |
 | Monthly Cooling | Previous month cooling delivered | kWh |
 
+## API Endpoints Used
+
+The app uses the same API endpoints as the Home Assistant integration:
+
+- `/api/v2/auth/login` - Authentication
+- `/api/v2/econtrol/modules` - Device discovery
+- `/api/v2/econtrol/modules/{id}/get_realtime_info` - Real-time sensor data
+- `/api/v2/econtrol/modules/{id}/heatloading_status` - Heat loading status
+- `/api/v2/econtrol/modules/{id}/heatpump_energy_statistics` - Monthly energy
+
 ## Flow Cards
 
 ### Conditions
 - Temperature thresholds for all sensors
 - Pressure level checks
 - Hot water request status
+- DG1/Smart Grid signal status
 
 ### Triggers
 - Temperature changes
 - Pressure changes
 - Hot water status changes
+- Alarm status changes
 
 ## Support
 
@@ -133,7 +172,7 @@ See [CHANGELOG.md](CHANGELOG.md) for version history.
 
 ## Credits
 
-Inspired by the [Home Assistant Eplucon Integration](https://github.com/koenhendriks/ha-eplucon) by Koen Hendriks.
+Based on the [Home Assistant Eplucon Integration](https://github.com/koenhendriks/ha-eplucon) by Koen Hendriks.
 
 ## License
 

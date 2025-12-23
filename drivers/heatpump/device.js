@@ -83,13 +83,31 @@ class HeatPumpDevice extends Homey.Device {
     if (!this.hasCapability(capability)) return;
     if (value === undefined || value === null) return;
     
-    let boolValue = value;
-    if (typeof value === 'string') {
-      const lowerValue = value.toLowerCase();
-      boolValue = lowerValue === 'true' || lowerValue === '1' || lowerValue === 'on' || lowerValue === 'yes';
+    let boolValue = false;
+    
+    if (typeof value === 'boolean') {
+      boolValue = value;
     } else if (typeof value === 'number') {
-      boolValue = value === 1 || value > 0;
-    } else if (typeof value !== 'boolean') {
+      boolValue = value > 0;
+    } else if (typeof value === 'string') {
+      const trimmed = value.trim().toLowerCase();
+      if (trimmed === '' || trimmed === '0' || trimmed === 'false' || trimmed === 'off' || trimmed === 'no' || trimmed === '[]') {
+        boolValue = false;
+      } else if (trimmed === '1' || trimmed === 'true' || trimmed === 'on' || trimmed === 'yes') {
+        boolValue = true;
+      } else if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+        try {
+          const arr = JSON.parse(trimmed);
+          boolValue = Array.isArray(arr) && arr.length > 0;
+        } catch {
+          boolValue = trimmed !== '[]';
+        }
+      } else {
+        boolValue = trimmed.length > 0;
+      }
+    } else if (Array.isArray(value)) {
+      boolValue = value.length > 0;
+    } else {
       boolValue = Boolean(value);
     }
     
@@ -108,57 +126,90 @@ class HeatPumpDevice extends Homey.Device {
       const api = this.homey.app.api;
       this.pollCount++;
       
-      const stats = await api.getStatistics().catch(err => {
-        this.error('Stats Error:', err.message);
+      // Use the realtime_info endpoint (like Koen's HA integration)
+      const realtimeInfo = await api.getRealtimeInfo().catch(err => {
+        this.error('Realtime Info Error:', err.message);
         return null;
       });
       
+      // Fetch monthly energy stats hourly
       let energyStats = null;
-      if (this.pollCount % 12 === 1) {
+      if (this.pollCount % 60 === 1) {
         energyStats = await api.getPreviousMonthEnergyStatistics().catch(err => {
           this.error('Energy Stats Error:', err.message);
           return null;
         });
       }
       
-      if (stats) {
-        // Mappings based on actual API field names from Eplucon Portal
+      if (realtimeInfo) {
+        // DEBUG: Log API response on first poll
+        if (this.pollCount <= 2) {
+          this.log('=== Realtime Info Fields ===');
+          this.log(JSON.stringify(Object.keys(realtimeInfo), null, 2));
+          this.log('=== Full Realtime Info ===');
+          this.log(JSON.stringify(realtimeInfo, null, 2));
+        }
+
+        // Map realtime_info fields based on CommonInfoDTO from Koen's integration
         const numberCapabilities = {
-          'measure_temperature.indoor': stats['Binnentemperatuur'],
-          'target_temperature': stats['Ingestelde ruimte Temp. Auto thTOUCH'],
-          'measure_temperature.outdoor': stats['Buitentemp.'],
-          'measure_temperature.hotwater': stats['WW temperatuur'],
-          'ww_configured': stats['Ingestelde temp. WW'] ? stats['Ingestelde temp. WW'] / 10 : null, // API returns 600 for 60°C
-          'measure_pressure': stats['Cv druk'],
-          'compressor_speed': stats['Compressor toerental'],
-          'measure_temperature.brine_in': stats['Brine in temperatuur'],
-          'measure_temperature.brine_out': stats['Brine out temperatuur'],
-          'brine_pressure': stats['Brine druk'],
-          'measure_temperature.heating_in': stats['Heating in temperatuur'],
-          'measure_temperature.heating_out': stats['Heating out temperatuur'],
-          'vent_rpm': stats['Act. vent. toerental'],
-          'condensation_temperature': stats['Condensatie temp.'],
-          'evaporation_temperature': stats['Verdamping temp.'],
-          'inverter_temperature': stats['Inverter temperatuur'],
-          'overheating': stats['Oververhitting'],
-          'pressgas_pressure': stats['Compressorafvoerdruk'],
-          'pressgas_temperature': stats['Pers gas temperatuur'],
-          'suction_gas_pressure': stats['Compressorzuigdruk'],
-          'suction_gas_temperature': stats['Zuig gas temperatuur'],
-          'expansion_valve': stats['Positie expansie ventiel'],
-          'total_active_power': stats['Actueel verbruik'] ? stats['Actueel verbruik'] * 1000 : null, // Convert kW to W
-          'import_energy': stats['Totaal import energie'],
-          'export_energy': stats['Totaal geproduceerde energie']
+          'measure_temperature.indoor': realtimeInfo.indoor_temperature,
+          'target_temperature': realtimeInfo.configured_indoor_temperature,
+          'measure_temperature.outdoor': realtimeInfo.outdoor_temperature,
+          'measure_temperature.hotwater': realtimeInfo.ww_temperature,
+          'ww_configured': realtimeInfo.ww_temperature_configured,
+          'measure_pressure': realtimeInfo.cv_pressure,
+          'compressor_speed': realtimeInfo.compressor_speed,
+          'operating_hours': realtimeInfo.operating_hours,
+          'number_of_starts': realtimeInfo.number_of_starts,
+          'measure_temperature.brine_in': realtimeInfo.brine_in_temperature,
+          'measure_temperature.brine_out': realtimeInfo.brine_out_temperature,
+          'brine_pump': realtimeInfo.brine_circulation_pump,
+          'brine_pressure': realtimeInfo.brine_pressure,
+          'measure_temperature.heating_in': realtimeInfo.heating_in_temperature,
+          'measure_temperature.heating_out': realtimeInfo.heating_out_temperature,
+          'production_pump': realtimeInfo.production_circulation_pump,
+          'vent_rpm': realtimeInfo.act_vent_rpm,
+          'condensation_temperature': realtimeInfo.condensation_temperature,
+          'evaporation_temperature': realtimeInfo.evaporation_temperature,
+          'inverter_temperature': realtimeInfo.inverter_temperature,
+          'overheating': realtimeInfo.overheating,
+          'pressgas_pressure': realtimeInfo.press_gas_pressure,
+          'pressgas_temperature': realtimeInfo.press_gas_temperature,
+          'suction_gas_pressure': realtimeInfo.suction_gas_pressure,
+          'suction_gas_temperature': realtimeInfo.suction_gas_temperature,
+          'expansion_valve': realtimeInfo.position_expansion_ventil,
+          'energy_delivered': realtimeInfo.energy_delivered,
+          'energy_usage': realtimeInfo.energy_usage,
+          'import_energy': realtimeInfo.import_energy,
+          'export_energy': realtimeInfo.export_energy,
+          'total_active_power': realtimeInfo.total_active_power,
+          'spf': realtimeInfo.spf
         };
 
-        // WW field indicates warm water production active (1 = on, 0 = off)
+        const stringCapabilities = {
+          'operation_mode': realtimeInfo.operation_mode,
+          'heating_mode': realtimeInfo.heating_mode,
+          'heating_state': realtimeInfo.current_heating_state,
+          'heating_pump_state': realtimeInfo.current_heating_pump_state
+        };
+
         const booleanCapabilities = {
-          'warmwater': stats['WW'],
-          'active_ww_request': stats['WW']
+          'alarm_active': realtimeInfo.alarm_active,
+          'active_ww_request': realtimeInfo.active_requests_ww,
+          'warmwater': realtimeInfo.warmwater,
+          'domestic_hot_water': realtimeInfo.warmwater,
+          'dg1_active': realtimeInfo.dg1,
+          'sg2': realtimeInfo.sg2,
+          'sg3': realtimeInfo.sg3,
+          'sg4': realtimeInfo.sg4
         };
 
         for (const [capability, value] of Object.entries(numberCapabilities)) {
           await this.setNumberCapability(capability, value);
+        }
+
+        for (const [capability, value] of Object.entries(stringCapabilities)) {
+          await this.setStringCapability(capability, value);
         }
 
         for (const [capability, value] of Object.entries(booleanCapabilities)) {
@@ -167,9 +218,9 @@ class HeatPumpDevice extends Homey.Device {
       }
 
       if (energyStats) {
-        await this.setNumberCapability('month_consumed', energyStats['consumed_energy']);
-        await this.setNumberCapability('month_heat', energyStats['delivered_heat']);
-        await this.setNumberCapability('month_cooling', energyStats['delivered_cooling']);
+        await this.setNumberCapability('month_consumed', energyStats.consumed_energy);
+        await this.setNumberCapability('month_heat', energyStats.delivered_heat);
+        await this.setNumberCapability('month_cooling', energyStats.delivered_cooling);
       }
 
     } catch (error) {

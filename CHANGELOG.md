@@ -7,16 +7,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.2.0] - 2025-12-23
 
-### Added - Extended Sensor Coverage (30 Capabilities)
-This release adds 19 new sensors based on available Eplucon Portal API data.
+### Added - Extended Sensor Coverage (47 Capabilities)
+This release matches the Home Assistant integration with 47 real-time sensors using the `/get_realtime_info` API endpoint.
+
+**Smart Grid & DG1 Signals:**
+- DG1 Active (grid signal indicator)
+- SG2, SG3, SG4 (smart grid signals)
+- Alarm Active (system alarm status)
 
 **Hot Water Sensors:**
 - WW Temperature Configured (target hot water temp)
 - Active WW Request (on/off indicator)
 - Warm Water Active (production status)
+- Domestic Hot Water (alias for warmwater)
+
+**Operational Sensors:**
+- Operating Hours (total runtime)
+- Number of Starts (compressor starts)
+- Operation Mode
+- Heating Mode
+- Heating State
+- Heating Pump State
 
 **Compressor & Pump Sensors:**
 - Compressor Speed (RPM)
+- Brine Circulation Pump (%)
+- Production Circulation Pump (%)
 - Vent RPM (ventilator speed)
 
 **Refrigerant Sensors:**
@@ -26,20 +42,21 @@ This release adds 19 new sensors based on available Eplucon Portal API data.
 - Suction Gas Pressure & Temperature
 - Press Gas Pressure & Temperature
 - Expansion Valve Position
+- Overheating (K)
 
 **Energy Sensors:**
-- Total Active Power (current consumption in W)
+- Energy Delivered (kWh)
+- Energy Usage (kWh)
+- Total Active Power (current consumption)
 - Import Energy (total kWh imported)
 - Export Energy (total kWh produced)
+- SPF (Seasonal Performance Factor)
 
 ### Changed
-- Fixed API field name mappings based on actual Eplucon Portal response
-- Improved capability value handling with type-aware parsing
-- Corrected WW configured temperature (API returns value × 10)
-- Converted power from kW to W for Homey compatibility
-
-### Removed
-- Sensors not available via statistics API endpoint (DG1, SG signals, operating hours, etc. - may be added in future if API endpoint discovered)
+- Switched from `/statistics` to `/get_realtime_info` API endpoint (same as HA integration)
+- Added `getRealtimeInfo()` and `getHeatloadingStatus()` API methods
+- Type-safe capability setters (setNumberCapability, setStringCapability, setBooleanCapability)
+- Debug logging for first 2 polls to verify API response structure
 
 ## [1.1.0] - 2025-12-23
 
@@ -97,6 +114,3 @@ This release adds 19 new sensors based on available Eplucon Portal API data.
 - Polling interval: 60 seconds for real-time stats
 - Monthly energy stats: fetched once per hour
 - Secure credential storage in device store
-
-### Removed
-- Broken app settings page (credentials now stored per-device during pairing)
