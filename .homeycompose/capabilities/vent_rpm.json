@@ -1,0 +1,14 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Vent RPM",
+    "nl": "Ventilator RPM"
+  },
+  "units": {
+    "en": "RPM"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "insights": true
+}

@@ -1,0 +1,14 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Operating Hours",
+    "nl": "Bedrijfsuren"
+  },
+  "units": {
+    "en": "h"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "insights": true
+}

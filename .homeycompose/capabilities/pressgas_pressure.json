@@ -1,0 +1,15 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Press Gas Pressure",
+    "nl": "Persgas Druk"
+  },
+  "units": {
+    "en": "bar"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "decimals": 2,
+  "insights": true
+}

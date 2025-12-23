@@ -6,10 +6,8 @@ class HeatPumpDevice extends Homey.Device {
     this.log('HeatPumpDevice initialized');
     this.pollCount = 0;
     
-    // Restore credentials from store and re-authenticate
     await this.restoreSession();
     
-    // Poll real-time stats every 60 seconds (60000ms)
     this.pollingInterval = this.homey.setInterval(this.pollData.bind(this), 60000);
     await this.pollData();
   }
@@ -50,13 +48,11 @@ class HeatPumpDevice extends Homey.Device {
       const api = this.homey.app.api;
       this.pollCount++;
       
-      // Always fetch real-time stats
       const stats = await api.getStatistics().catch(err => {
         this.error('Stats Error:', err.message);
         return null;
       });
       
-      // Only fetch monthly energy stats every 12 polls (once per hour)
       let energyStats = null;
       if (this.pollCount % 12 === 1) {
         energyStats = await api.getPreviousMonthEnergyStatistics().catch(err => {
@@ -66,24 +62,37 @@ class HeatPumpDevice extends Homey.Device {
       }
       
       if (stats) {
-        // Map standard stats
         const map = {
           'measure_temperature.indoor': stats['Binnentemperatuur'],
+          'target_temperature': stats['Ingestelde binnentemperatuur'],
+          'measure_temperature.outdoor': stats['Buitentemp.'],
           'measure_temperature.hotwater': stats['WW temperatuur'],
+          'measure_pressure': stats['Cv druk'],
+          'compressor_speed': stats['Compressorsnelheid'],
+          'operating_hours': stats['Bedrijfsuren'],
           'measure_temperature.brine_in': stats['Brine in temperatuur'],
           'measure_temperature.brine_out': stats['Brine out temperatuur'],
+          'brine_pump': stats['Brine circulatiepomp'],
+          'brine_pressure': stats['Brine druk'],
           'measure_temperature.heating_in': stats['Heating in temperatuur'],
           'measure_temperature.heating_out': stats['Heating out temperatuur'],
-          'measure_pressure': stats['Cv druk'],
-          'measure_temperature.outdoor': stats['Buitentemp.']
+          'vent_rpm': stats['Ventilator RPM'],
+          'condensation_temperature': stats['Condensatietemperatuur'],
+          'evaporation_temperature': stats['Verdampingstemperatuur'],
+          'inverter_temperature': stats['Omvormertemperatuur'],
+          'overheating': stats['Oververhitting'],
+          'pressgas_pressure': stats['Persgas druk'],
+          'pressgas_temperature': stats['Persgas temperatuur']
         };
 
         for (const [capability, value] of Object.entries(map)) {
           if (value !== undefined && value !== null) {
             const parsedValue = parseFloat(value);
             if (!isNaN(parsedValue)) {
-              if (this.getCapabilityValue(capability) !== parsedValue) {
-                 await this.setCapabilityValue(capability, parsedValue).catch(this.error);
+              if (this.hasCapability(capability)) {
+                if (this.getCapabilityValue(capability) !== parsedValue) {
+                  await this.setCapabilityValue(capability, parsedValue).catch(this.error);
+                }
               }
             }
           }
@@ -91,8 +100,6 @@ class HeatPumpDevice extends Homey.Device {
       }
 
       if (energyStats) {
-        // Map energy stats (Monthly values)
-        // Using custom capabilities defined in app.json
         const energyMap = {
           'month_consumed': energyStats['consumed_energy'],
           'month_heat': energyStats['delivered_heat'],
@@ -103,8 +110,10 @@ class HeatPumpDevice extends Homey.Device {
           if (value !== undefined && value !== null) {
             const parsedValue = parseFloat(value);
             if (!isNaN(parsedValue)) {
-              if (this.getCapabilityValue(capability) !== parsedValue) {
-                 await this.setCapabilityValue(capability, parsedValue).catch(this.error);
+              if (this.hasCapability(capability)) {
+                if (this.getCapabilityValue(capability) !== parsedValue) {
+                  await this.setCapabilityValue(capability, parsedValue).catch(this.error);
+                }
               }
             }
           }

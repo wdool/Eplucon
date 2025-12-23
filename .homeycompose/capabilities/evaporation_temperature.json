@@ -1,0 +1,15 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Evaporation Temperature",
+    "nl": "Verdampingstemperatuur"
+  },
+  "units": {
+    "en": "°C"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "decimals": 1,
+  "insights": true
+}

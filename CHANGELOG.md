@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2025-12-23
+
+### Added
+- Compressor Speed (RPM) sensor
+- Target Temperature sensor (configured indoor temperature)
+- Operating Hours sensor (total runtime)
+- Brine Circulation Pump (%) sensor
+- Brine Pressure (bar) sensor
+- Vent RPM sensor
+- Condensation Temperature sensor
+- Evaporation Temperature sensor
+- Inverter Temperature sensor
+- Overheating (K) sensor
+- Press Gas Pressure (bar) sensor
+- Press Gas Temperature sensor
+
+### Changed
+- Reorganized capability order for better UX
+- Added hasCapability checks for graceful handling of unavailable sensors
+
 ## [1.0.1] - 2025-12-20
 
 ### Removed

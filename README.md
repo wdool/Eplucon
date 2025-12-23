@@ -4,8 +4,9 @@ Monitor your Eplucon Ecoforest Heat Pump directly from your Homey smart home hub
 
 ## Features
 
-- Real-time temperature monitoring (indoor, outdoor, hot water, brine, heating)
-- CV pressure monitoring
+- Real-time temperature monitoring (20+ sensors)
+- Compressor and pump status monitoring
+- CV and brine pressure monitoring
 - Monthly energy statistics (consumed, heat delivered, cooling delivered)
 - Automatic polling every 60 seconds
 - Flow card support for automations
@@ -16,7 +17,7 @@ Monitor your Eplucon Ecoforest Heat Pump directly from your Homey smart home hub
 
 ## Requirements
 
-- Homey Pro (2023) or Homey Pro (Early 2023) with firmware 10.0.0 or higher
+- Homey Pro with firmware 12.0.0 or higher
 - Active Eplucon Portal account
 
 ## Installation
@@ -48,14 +49,39 @@ homey app install
 
 ## Capabilities
 
+### Temperature Sensors
 | Capability | Description | Unit |
 |------------|-------------|------|
 | Indoor Temperature | Room temperature | °C |
+| Target Temperature | Configured indoor temperature | °C |
 | Outdoor Temperature | Outside temperature | °C |
 | Hot Water Temperature | Domestic hot water | °C |
 | Brine In/Out | Ground loop temperatures | °C |
 | Heating In/Out | Heating circuit temperatures | °C |
+| Condensation Temperature | Refrigerant condensation | °C |
+| Evaporation Temperature | Refrigerant evaporation | °C |
+| Inverter Temperature | Inverter unit temperature | °C |
+| Press Gas Temperature | Pressurized gas temperature | °C |
+
+### Operational Sensors
+| Capability | Description | Unit |
+|------------|-------------|------|
+| Compressor Speed | Compressor RPM | RPM |
+| Vent RPM | Ventilation fan speed | RPM |
+| Brine Circulation Pump | Brine pump percentage | % |
+| Operating Hours | Total runtime | h |
+| Overheating | Superheat value | K |
+
+### Pressure Sensors
+| Capability | Description | Unit |
+|------------|-------------|------|
 | CV Pressure | Central heating pressure | bar |
+| Brine Pressure | Ground loop pressure | bar |
+| Press Gas Pressure | High-side refrigerant pressure | bar |
+
+### Energy Statistics (Monthly)
+| Capability | Description | Unit |
+|------------|-------------|------|
 | Monthly Consumed | Previous month energy used | kWh |
 | Monthly Heat | Previous month heat delivered | kWh |
 | Monthly Cooling | Previous month cooling delivered | kWh |
@@ -73,7 +99,7 @@ homey app install
 ## Support
 
 - Community: [Homey Community Forum](https://community.homey.app/t/app-pro-eplucon-ecoforest-warmtepomp/147455)
-- Issues: [GitHub Issues](https://github.com/woutdool/homey-eplucon/issues)
+- Issues: [GitHub Issues](https://github.com/wdool/Eplucon/issues)
 - Email: woutdool@gmail.com
 
 ## Changelog
