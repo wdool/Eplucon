@@ -1,0 +1,15 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Import Energy",
+    "nl": "Geïmporteerde Energie"
+  },
+  "units": {
+    "en": "kWh"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "decimals": 2,
+  "insights": true
+}

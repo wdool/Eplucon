@@ -1,0 +1,11 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Number of Starts",
+    "nl": "Aantal Starts"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "insights": true
+}

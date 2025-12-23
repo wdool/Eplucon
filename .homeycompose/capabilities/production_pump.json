@@ -1,0 +1,16 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Production Circulation Pump",
+    "nl": "Productie Circulatiepomp"
+  },
+  "units": {
+    "en": "%"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "min": 0,
+  "max": 100,
+  "insights": true
+}

@@ -1,0 +1,14 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Total Active Power",
+    "nl": "Totaal Actief Vermogen"
+  },
+  "units": {
+    "en": "W"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "insights": true
+}

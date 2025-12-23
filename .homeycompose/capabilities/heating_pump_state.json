@@ -1,0 +1,11 @@
+{
+  "type": "string",
+  "title": {
+    "en": "Heating Pump State",
+    "nl": "Warmtepomp Status"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "insights": true
+}

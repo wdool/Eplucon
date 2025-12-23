@@ -4,10 +4,15 @@ Monitor your Eplucon Ecoforest Heat Pump directly from your Homey smart home hub
 
 ## Features
 
-- Real-time temperature monitoring (20+ sensors)
-- Compressor and pump status monitoring
-- CV and brine pressure monitoring
-- Monthly energy statistics (consumed, heat delivered, cooling delivered)
+- **48 sensors** - Full parity with the Home Assistant Eplucon integration
+- Real-time temperature monitoring (indoor, outdoor, hot water, brine, heating, refrigerant)
+- Status & mode monitoring (operation mode, heating mode, alarm status)
+- Hot water monitoring (WW request, temperature, heatloading)
+- Energy statistics (delivered, usage, import/export, power, SPF)
+- Pressure monitoring (CV, brine, refrigerant)
+- Pump & compressor status
+- Smart Grid signals (SG2, SG3, SG4, DG1)
+- Monthly energy statistics
 - Automatic polling every 60 seconds
 - Flow card support for automations
 
@@ -47,39 +52,81 @@ homey app run
 homey app install
 ```
 
-## Capabilities
+## Capabilities (48 Total)
 
-### Temperature Sensors
+### Temperature Sensors (12)
 | Capability | Description | Unit |
 |------------|-------------|------|
 | Indoor Temperature | Room temperature | °C |
 | Target Temperature | Configured indoor temperature | °C |
 | Outdoor Temperature | Outside temperature | °C |
 | Hot Water Temperature | Domestic hot water | °C |
+| WW Configured | Target hot water temperature | °C |
 | Brine In/Out | Ground loop temperatures | °C |
 | Heating In/Out | Heating circuit temperatures | °C |
 | Condensation Temperature | Refrigerant condensation | °C |
 | Evaporation Temperature | Refrigerant evaporation | °C |
 | Inverter Temperature | Inverter unit temperature | °C |
 | Press Gas Temperature | Pressurized gas temperature | °C |
+| Suction Gas Temperature | Suction gas temperature | °C |
 
-### Operational Sensors
+### Status & Mode Sensors (5)
+| Capability | Description |
+|------------|-------------|
+| Operation Mode | Current operation mode |
+| Heating Mode | Current heating mode |
+| Heating State | Current heating state |
+| Heating Pump State | Heat pump status |
+| Alarm Active | Alarm indicator (on/off) |
+
+### Hot Water Sensors (5)
+| Capability | Description |
+|------------|-------------|
+| Active WW Request | Hot water request active (on/off) |
+| Warm Water Active | Warm water production active |
+| Domestic Hot Water | Domestic hot water active |
+| Heatloading Active | Heat loading active |
+| Heatloading for Heating | Heat loading for heating active |
+
+### Operational Sensors (6)
 | Capability | Description | Unit |
 |------------|-------------|------|
 | Compressor Speed | Compressor RPM | RPM |
 | Vent RPM | Ventilation fan speed | RPM |
 | Brine Circulation Pump | Brine pump percentage | % |
+| Production Circulation Pump | Production pump percentage | % |
 | Operating Hours | Total runtime | h |
+| Number of Starts | Total compressor starts | - |
 | Overheating | Superheat value | K |
+| Expansion Valve Position | Valve opening | % |
 
-### Pressure Sensors
+### Pressure Sensors (4)
 | Capability | Description | Unit |
 |------------|-------------|------|
 | CV Pressure | Central heating pressure | bar |
 | Brine Pressure | Ground loop pressure | bar |
 | Press Gas Pressure | High-side refrigerant pressure | bar |
+| Suction Gas Pressure | Low-side refrigerant pressure | bar |
 
-### Energy Statistics (Monthly)
+### Energy Sensors (6)
+| Capability | Description | Unit |
+|------------|-------------|------|
+| Energy Delivered | Total energy delivered | kWh |
+| Energy Usage | Total energy usage | kWh |
+| Import Energy | Grid energy imported | kWh |
+| Export Energy | Grid energy exported | kWh |
+| Total Active Power | Current power consumption | W |
+| SPF | Seasonal Performance Factor | - |
+
+### Smart Grid Sensors (4)
+| Capability | Description |
+|------------|-------------|
+| DG1 Active | Direct outlet DG1 status |
+| SG2 | Smart Grid signal 2 |
+| SG3 | Smart Grid signal 3 |
+| SG4 | Smart Grid signal 4 |
+
+### Monthly Energy Statistics (3)
 | Capability | Description | Unit |
 |------------|-------------|------|
 | Monthly Consumed | Previous month energy used | kWh |
@@ -91,10 +138,12 @@ homey app install
 ### Conditions
 - Temperature thresholds for all sensors
 - Pressure level checks
+- Status checks (WW request active, alarm active, etc.)
 
 ### Triggers
 - Temperature changes
 - Pressure changes
+- Status changes
 
 ## Support
 
@@ -105,6 +154,10 @@ homey app install
 ## Changelog
 
 See [CHANGELOG.md](CHANGELOG.md) for version history.
+
+## Credits
+
+Inspired by the [Home Assistant Eplucon Integration](https://github.com/koenhendriks/ha-eplucon) by Koen Hendriks.
 
 ## License
 

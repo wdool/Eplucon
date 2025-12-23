@@ -1,0 +1,15 @@
+{
+  "type": "number",
+  "title": {
+    "en": "WW Temperature Configured",
+    "nl": "WW Temperatuur Ingesteld"
+  },
+  "units": {
+    "en": "°C"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "decimals": 1,
+  "insights": true
+}

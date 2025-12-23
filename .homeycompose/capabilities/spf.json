@@ -1,0 +1,12 @@
+{
+  "type": "number",
+  "title": {
+    "en": "SPF (Seasonal Performance Factor)",
+    "nl": "SPF (Seizoensgebonden Prestatiefactor)"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "decimals": 2,
+  "insights": true
+}
