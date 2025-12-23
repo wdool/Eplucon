@@ -7,39 +7,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.2.0] - 2025-12-23
 
-### Added - Full Sensor Parity with Home Assistant Integration
-This release adds all 48 sensors to match the Home Assistant Eplucon integration.
-
-**Status & Mode Sensors:**
-- Operation Mode, Heating Mode, Heating State, Heating Pump State
-- Alarm Active indicator
+### Added - Extended Sensor Coverage (30 Capabilities)
+This release adds 19 new sensors based on available Eplucon Portal API data.
 
 **Hot Water Sensors:**
-- WW Temperature Configured
-- Active WW Request (on/off)
-- Warm Water Active, Domestic Hot Water
-- Heatloading Active, Heatloading for Heating
+- WW Temperature Configured (target hot water temp)
+- Active WW Request (on/off indicator)
+- Warm Water Active (production status)
 
-**Energy Sensors:**
-- Energy Delivered, Energy Usage
-- Import Energy, Export Energy
-- Total Active Power, SPF (Seasonal Performance Factor)
+**Compressor & Pump Sensors:**
+- Compressor Speed (RPM)
+- Vent RPM (ventilator speed)
 
 **Refrigerant Sensors:**
-- Suction Gas Pressure, Suction Gas Temperature
+- Condensation Temperature
+- Evaporation Temperature
+- Inverter Temperature
+- Suction Gas Pressure & Temperature
+- Press Gas Pressure & Temperature
 - Expansion Valve Position
 
-**Pump & Counter Sensors:**
-- Production Circulation Pump
-- Number of Starts
-
-**Smart Grid Sensors:**
-- DG1 Active (Direct Outlet)
-- SG2, SG3, SG4 signals
+**Energy Sensors:**
+- Total Active Power (current consumption in W)
+- Import Energy (total kWh imported)
+- Export Energy (total kWh produced)
 
 ### Changed
+- Fixed API field name mappings based on actual Eplucon Portal response
 - Improved capability value handling with type-aware parsing
-- Better boolean/string/number conversion for API responses
+- Corrected WW configured temperature (API returns value × 10)
+- Converted power from kW to W for Homey compatibility
+
+### Removed
+- Sensors not available via statistics API endpoint (DG1, SG signals, operating hours, etc. - may be added in future if API endpoint discovered)
 
 ## [1.1.0] - 2025-12-23
 

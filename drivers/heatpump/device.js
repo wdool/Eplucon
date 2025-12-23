@@ -122,75 +122,43 @@ class HeatPumpDevice extends Homey.Device {
       }
       
       if (stats) {
-        // DEBUG: Log all available API fields (remove after fixing mappings)
-        if (this.pollCount <= 2) {
-          this.log('=== API Statistics Fields ===');
-          this.log(JSON.stringify(Object.keys(stats), null, 2));
-          this.log('=== Full Stats Object ===');
-          this.log(JSON.stringify(stats, null, 2));
-        }
-
+        // Mappings based on actual API field names from Eplucon Portal
         const numberCapabilities = {
           'measure_temperature.indoor': stats['Binnentemperatuur'],
-          'target_temperature': stats['Ingestelde binnentemperatuur'],
+          'target_temperature': stats['Ingestelde ruimte Temp. Auto thTOUCH'],
           'measure_temperature.outdoor': stats['Buitentemp.'],
           'measure_temperature.hotwater': stats['WW temperatuur'],
-          'ww_configured': stats['Ingestelde ww temperatuur'],
+          'ww_configured': stats['Ingestelde temp. WW'] ? stats['Ingestelde temp. WW'] / 10 : null, // API returns 600 for 60°C
           'measure_pressure': stats['Cv druk'],
-          'compressor_speed': stats['Compressorsnelheid'],
-          'operating_hours': stats['Bedrijfsuren'],
-          'number_of_starts': stats['Aantal starts'],
+          'compressor_speed': stats['Compressor toerental'],
           'measure_temperature.brine_in': stats['Brine in temperatuur'],
           'measure_temperature.brine_out': stats['Brine out temperatuur'],
-          'brine_pump': stats['Brine circulatiepomp'],
           'brine_pressure': stats['Brine druk'],
           'measure_temperature.heating_in': stats['Heating in temperatuur'],
           'measure_temperature.heating_out': stats['Heating out temperatuur'],
-          'production_pump': stats['Productie circulatiepomp'],
-          'vent_rpm': stats['Ventilator RPM'],
-          'condensation_temperature': stats['Condensatietemperatuur'],
-          'evaporation_temperature': stats['Verdampingstemperatuur'],
-          'inverter_temperature': stats['Omvormertemperatuur'],
+          'vent_rpm': stats['Act. vent. toerental'],
+          'condensation_temperature': stats['Condensatie temp.'],
+          'evaporation_temperature': stats['Verdamping temp.'],
+          'inverter_temperature': stats['Inverter temperatuur'],
           'overheating': stats['Oververhitting'],
-          'pressgas_pressure': stats['Persgas druk'],
-          'pressgas_temperature': stats['Persgas temperatuur'],
-          'suction_gas_pressure': stats['Zuiggas druk'],
-          'suction_gas_temperature': stats['Zuiggas temperatuur'],
-          'expansion_valve': stats['Positie expansieventiel'],
-          'energy_delivered': stats['Geleverde energie'],
-          'energy_usage': stats['Energieverbruik'],
-          'import_energy': stats['Import energie'],
-          'export_energy': stats['Export energie'],
-          'total_active_power': stats['Totaal actief vermogen'],
-          'spf': stats['SPF']
+          'pressgas_pressure': stats['Compressorafvoerdruk'],
+          'pressgas_temperature': stats['Pers gas temperatuur'],
+          'suction_gas_pressure': stats['Compressorzuigdruk'],
+          'suction_gas_temperature': stats['Zuig gas temperatuur'],
+          'expansion_valve': stats['Positie expansie ventiel'],
+          'total_active_power': stats['Actueel verbruik'] ? stats['Actueel verbruik'] * 1000 : null, // Convert kW to W
+          'import_energy': stats['Totaal import energie'],
+          'export_energy': stats['Totaal geproduceerde energie']
         };
 
-        const stringCapabilities = {
-          'operation_mode': stats['Bedrijfsmodus'] || stats['Bedrijfsmodus tekst'],
-          'heating_mode': stats['Verwarmingsmodus'] || stats['Verwarmingsmodus tekst'],
-          'heating_state': stats['Huidige verwarmingsstatus'],
-          'heating_pump_state': stats['Huidige warmtepomp status']
-        };
-
+        // WW field indicates warm water production active (1 = on, 0 = off)
         const booleanCapabilities = {
-          'alarm_active': stats['Alarm actief'],
-          'active_ww_request': stats['Actieve ww aanvraag'],
-          'warmwater': stats['Warm water'],
-          'domestic_hot_water': stats['Sanitair warm water'],
-          'dg1_active': stats['DG1'],
-          'heatloading_active': stats['Warmtelading actief'],
-          'heatloading_heating': stats['Warmtelading voor verwarming'],
-          'sg2': stats['SG2'],
-          'sg3': stats['SG3'],
-          'sg4': stats['SG4']
+          'warmwater': stats['WW'],
+          'active_ww_request': stats['WW']
         };
 
         for (const [capability, value] of Object.entries(numberCapabilities)) {
           await this.setNumberCapability(capability, value);
-        }
-
-        for (const [capability, value] of Object.entries(stringCapabilities)) {
-          await this.setStringCapability(capability, value);
         }
 
         for (const [capability, value] of Object.entries(booleanCapabilities)) {
