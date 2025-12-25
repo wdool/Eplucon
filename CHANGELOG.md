@@ -5,7 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.2.2] - 2025-12-25
+## [1.3.0] - 2025-12-25
+
+### Changed
+- Changed App ID from `nl.eplucon.homey` to `nl.eplucon.heatpump` (App Store requirement)
+- Removed unused `homey:manager:api` permission
+- New app image showing heat pump installation (not just logo)
+- New driver image showing device on white background
+- Unique driver icon different from app icon
 
 ### Fixed
 - Improved error messages during pairing (clearer feedback for login issues)
