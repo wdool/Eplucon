@@ -1,6 +1,6 @@
 {
   "name": "nl.eplucon.homey",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Eplucon Ecoforest Heat Pump App for Homey",
   "main": "app.js",
   "scripts": {
