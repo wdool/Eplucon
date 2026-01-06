@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.1] - 2026-01-06
+
+### Added
+- Flow card trigger for DG1 heating on/off status changes
+- Flow card trigger for hot water heating on/off status changes
+
+### Changed
+- Improved app image with lifestyle photo (heat pump with solar panels)
+- Simplified README for App Store (removed development instructions)
+
+### Fixed
+- Renamed vent_rpm to vent_speed capability with % unit instead of RPM (community feedback)
+- Overheating now correctly shows °C instead of K (community feedback)
+
 ## [1.3.0] - 2025-12-25
 
 ### Changed

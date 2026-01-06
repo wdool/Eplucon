@@ -1,0 +1,56 @@
+{
+  "id": "dg1_changed",
+  "title": {
+    "en": "Heating (DG1) turned on or off",
+    "nl": "Verwarming (DG1) aan of uit"
+  },
+  "titleFormatted": {
+    "en": "Heating (DG1) [[state]]",
+    "nl": "Verwarming (DG1) [[state]]"
+  },
+  "hint": {
+    "en": "Triggers when the heat pump starts or stops heating (DG1 signal changes)",
+    "nl": "Triggert wanneer de warmtepomp begint of stopt met verwarmen (DG1 signaal wijzigt)"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=heatpump"
+    },
+    {
+      "type": "dropdown",
+      "name": "state",
+      "title": {
+        "en": "State",
+        "nl": "Status"
+      },
+      "values": [
+        {
+          "id": "on",
+          "label": {
+            "en": "Turned on",
+            "nl": "Ingeschakeld"
+          }
+        },
+        {
+          "id": "off",
+          "label": {
+            "en": "Turned off",
+            "nl": "Uitgeschakeld"
+          }
+        }
+      ]
+    }
+  ],
+  "tokens": [
+    {
+      "name": "dg1_active",
+      "type": "boolean",
+      "title": {
+        "en": "DG1 Active",
+        "nl": "DG1 Actief"
+      }
+    }
+  ]
+}

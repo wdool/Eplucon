@@ -36,7 +36,7 @@
     "brine_pump",
     "brine_pressure",
     "production_pump",
-    "vent_rpm",
+    "vent_speed",
     "condensation_temperature",
     "evaporation_temperature",
     "inverter_temperature",

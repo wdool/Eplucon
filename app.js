@@ -16,8 +16,29 @@ class EpluconApp extends Homey.App {
   _registerFlowCards() {
     this.log('Registering Flow Cards...');
     
-    // Example: Trigger when temperature changes
-    // These should ideally be defined in .homeycompose/flow/triggers/
+    // DG1 (Heating) changed trigger
+    this.homey.flow.getDeviceTriggerCard('dg1_changed')
+      .registerRunListener(async (args, state) => {
+        if (args.state === 'on') {
+          return state.dg1_active === true;
+        } else if (args.state === 'off') {
+          return state.dg1_active === false;
+        }
+        return false;
+      });
+    
+    // Hot water changed trigger
+    this.homey.flow.getDeviceTriggerCard('hotwater_changed')
+      .registerRunListener(async (args, state) => {
+        if (args.state === 'on') {
+          return state.warmwater_active === true;
+        } else if (args.state === 'off') {
+          return state.warmwater_active === false;
+        }
+        return false;
+      });
+    
+    this.log('Flow Cards registered');
   }
 
 }

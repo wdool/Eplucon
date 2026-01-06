@@ -1,0 +1,56 @@
+{
+  "id": "hotwater_changed",
+  "title": {
+    "en": "Hot water heating turned on or off",
+    "nl": "Warm water verwarming aan of uit"
+  },
+  "titleFormatted": {
+    "en": "Hot water heating [[state]]",
+    "nl": "Warm water verwarming [[state]]"
+  },
+  "hint": {
+    "en": "Triggers when the heat pump starts or stops heating hot water",
+    "nl": "Triggert wanneer de warmtepomp begint of stopt met warm water verwarmen"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=heatpump"
+    },
+    {
+      "type": "dropdown",
+      "name": "state",
+      "title": {
+        "en": "State",
+        "nl": "Status"
+      },
+      "values": [
+        {
+          "id": "on",
+          "label": {
+            "en": "Turned on",
+            "nl": "Ingeschakeld"
+          }
+        },
+        {
+          "id": "off",
+          "label": {
+            "en": "Turned off",
+            "nl": "Uitgeschakeld"
+          }
+        }
+      ]
+    }
+  ],
+  "tokens": [
+    {
+      "name": "warmwater_active",
+      "type": "boolean",
+      "title": {
+        "en": "Hot Water Active",
+        "nl": "Warm Water Actief"
+      }
+    }
+  ]
+}

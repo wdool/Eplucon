@@ -6,6 +6,10 @@ class HeatPumpDevice extends Homey.Device {
     this.log('HeatPumpDevice initialized');
     this.pollCount = 0;
     
+    // Track previous values for flow triggers
+    this._previousDg1 = null;
+    this._previousWarmwater = null;
+    
     await this.restoreSession();
     
     this.pollingInterval = this.homey.setInterval(this.pollData.bind(this), 60000);
@@ -79,9 +83,8 @@ class HeatPumpDevice extends Homey.Device {
     }
   }
 
-  async setBooleanCapability(capability, value) {
-    if (!this.hasCapability(capability)) return;
-    if (value === undefined || value === null) return;
+  parseBooleanValue(value) {
+    if (value === undefined || value === null) return null;
     
     let boolValue = false;
     
@@ -111,6 +114,16 @@ class HeatPumpDevice extends Homey.Device {
       boolValue = Boolean(value);
     }
     
+    return boolValue;
+  }
+
+  async setBooleanCapability(capability, value) {
+    if (!this.hasCapability(capability)) return;
+    if (value === undefined || value === null) return;
+    
+    const boolValue = this.parseBooleanValue(value);
+    if (boolValue === null) return;
+    
     try {
       const currentValue = this.getCapabilityValue(capability);
       if (currentValue !== boolValue) {
@@ -121,18 +134,40 @@ class HeatPumpDevice extends Homey.Device {
     }
   }
 
+  async triggerDg1Changed(newValue) {
+    const boolValue = this.parseBooleanValue(newValue);
+    if (boolValue === null) return;
+    
+    if (this._previousDg1 !== null && this._previousDg1 !== boolValue) {
+      this.log(`DG1 changed: ${this._previousDg1} -> ${boolValue}`);
+      const triggerCard = this.homey.flow.getDeviceTriggerCard('dg1_changed');
+      await triggerCard.trigger(this, { dg1_active: boolValue }, { dg1_active: boolValue }).catch(this.error);
+    }
+    this._previousDg1 = boolValue;
+  }
+
+  async triggerHotwaterChanged(newValue) {
+    const boolValue = this.parseBooleanValue(newValue);
+    if (boolValue === null) return;
+    
+    if (this._previousWarmwater !== null && this._previousWarmwater !== boolValue) {
+      this.log(`Hot water changed: ${this._previousWarmwater} -> ${boolValue}`);
+      const triggerCard = this.homey.flow.getDeviceTriggerCard('hotwater_changed');
+      await triggerCard.trigger(this, { warmwater_active: boolValue }, { warmwater_active: boolValue }).catch(this.error);
+    }
+    this._previousWarmwater = boolValue;
+  }
+
   async pollData() {
     try {
       const api = this.homey.app.api;
       this.pollCount++;
       
-      // Use the realtime_info endpoint (like Koen's HA integration)
       const realtimeInfo = await api.getRealtimeInfo().catch(err => {
         this.error('Realtime Info Error:', err.message);
         return null;
       });
       
-      // Fetch monthly energy stats hourly
       let energyStats = null;
       if (this.pollCount % 60 === 1) {
         energyStats = await api.getPreviousMonthEnergyStatistics().catch(err => {
@@ -142,7 +177,6 @@ class HeatPumpDevice extends Homey.Device {
       }
       
       if (realtimeInfo) {
-        // DEBUG: Log API response on first poll
         if (this.pollCount <= 2) {
           this.log('=== Realtime Info Fields ===');
           this.log(JSON.stringify(Object.keys(realtimeInfo), null, 2));
@@ -150,7 +184,6 @@ class HeatPumpDevice extends Homey.Device {
           this.log(JSON.stringify(realtimeInfo, null, 2));
         }
 
-        // Map realtime_info fields based on CommonInfoDTO from Koen's integration
         const numberCapabilities = {
           'measure_temperature.indoor': realtimeInfo.indoor_temperature,
           'target_temperature': realtimeInfo.configured_indoor_temperature,
@@ -168,7 +201,7 @@ class HeatPumpDevice extends Homey.Device {
           'measure_temperature.heating_in': realtimeInfo.heating_in_temperature,
           'measure_temperature.heating_out': realtimeInfo.heating_out_temperature,
           'production_pump': realtimeInfo.production_circulation_pump,
-          'vent_rpm': realtimeInfo.act_vent_rpm,
+          'vent_speed': realtimeInfo.act_vent_rpm,
           'condensation_temperature': realtimeInfo.condensation_temperature,
           'evaporation_temperature': realtimeInfo.evaporation_temperature,
           'inverter_temperature': realtimeInfo.inverter_temperature,
@@ -215,6 +248,10 @@ class HeatPumpDevice extends Homey.Device {
         for (const [capability, value] of Object.entries(booleanCapabilities)) {
           await this.setBooleanCapability(capability, value);
         }
+
+        // Trigger flow cards for DG1 and hot water changes
+        await this.triggerDg1Changed(realtimeInfo.dg1);
+        await this.triggerHotwaterChanged(realtimeInfo.warmwater);
       }
 
       if (energyStats) {

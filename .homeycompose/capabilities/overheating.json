@@ -5,7 +5,7 @@
     "nl": "Oververhitting"
   },
   "units": {
-    "en": "K"
+    "en": "°C"
   },
   "getable": true,
   "setable": false,
