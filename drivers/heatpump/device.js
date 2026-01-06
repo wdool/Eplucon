@@ -201,7 +201,7 @@ class HeatPumpDevice extends Homey.Device {
           'measure_temperature.heating_in': realtimeInfo.heating_in_temperature,
           'measure_temperature.heating_out': realtimeInfo.heating_out_temperature,
           'production_pump': realtimeInfo.production_circulation_pump,
-          'vent_speed': realtimeInfo.act_vent_rpm,
+          'vent_rpm': realtimeInfo.act_vent_rpm,
           'condensation_temperature': realtimeInfo.condensation_temperature,
           'evaporation_temperature': realtimeInfo.evaporation_temperature,
           'inverter_temperature': realtimeInfo.inverter_temperature,

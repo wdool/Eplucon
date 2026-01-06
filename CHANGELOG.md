@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.2] - 2026-01-06
+
+### Fixed
+- Critical fix: Reverted capability identifier rename that broke existing devices
+- Capability `vent_rpm` now correctly displays as "Vent Speed" with % unit (internal ID unchanged for compatibility)
+
 ## [1.3.1] - 2026-01-06
 
 ### Added
@@ -16,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Simplified README for App Store (removed development instructions)
 
 ### Fixed
-- Renamed vent_rpm to vent_speed capability with % unit instead of RPM (community feedback)
+- vent_rpm capability now shows % unit and "Vent Speed" title (community feedback - it's a percentage, not RPM)
 - Overheating now correctly shows °C instead of K (community feedback)
 
 ## [1.3.0] - 2025-12-25
