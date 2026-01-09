@@ -10,6 +10,7 @@
   "getable": true,
   "setable": false,
   "uiComponent": "sensor",
+  "icon": "/assets/capabilities/valve.svg",
   "min": 0,
   "max": 100,
   "insights": true

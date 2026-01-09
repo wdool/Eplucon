@@ -5,10 +5,12 @@
     "nl": "Totaal Actief Vermogen"
   },
   "units": {
-    "en": "W"
+    "en": "kW"
   },
+  "decimals": 2,
   "getable": true,
   "setable": false,
   "uiComponent": "sensor",
+  "icon": "/assets/capabilities/power.svg",
   "insights": true
 }

@@ -7,6 +7,7 @@
   "getable": true,
   "setable": false,
   "uiComponent": "sensor",
+  "icon": "/assets/capabilities/efficiency.svg",
   "decimals": 2,
   "insights": true
 }

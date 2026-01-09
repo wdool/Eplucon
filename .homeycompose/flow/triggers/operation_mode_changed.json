@@ -1,0 +1,51 @@
+{
+  "id": "operation_mode_changed",
+  "title": {
+    "en": "Operation mode changed",
+    "nl": "Bedrijfsmodus veranderd"
+  },
+  "titleFormatted": {
+    "en": "Operation mode changed to [[state]]",
+    "nl": "Bedrijfsmodus veranderd naar [[state]]"
+  },
+  "hint": {
+    "en": "Triggers when the heat pump operation mode changes (Off, Heating, Cooling, Hot Water)",
+    "nl": "Triggert wanneer de warmtepomp bedrijfsmodus verandert (Uit, Verwarming, Koeling, Warm Water)"
+  },
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=heatpump"
+    },
+    {
+      "type": "dropdown",
+      "name": "state",
+      "title": {
+        "en": "Mode",
+        "nl": "Modus"
+      },
+      "values": [
+        { "id": "any", "title": { "en": "Any", "nl": "Elke" } },
+        { "id": "off", "title": { "en": "Off", "nl": "Uit" } },
+        { "id": "heating", "title": { "en": "Heating", "nl": "Verwarming" } },
+        { "id": "cooling", "title": { "en": "Cooling", "nl": "Koeling" } },
+        { "id": "hotwater", "title": { "en": "Hot Water", "nl": "Warm Water" } }
+      ]
+    }
+  ],
+  "tokens": [
+    {
+      "name": "mode",
+      "type": "string",
+      "title": {
+        "en": "Mode",
+        "nl": "Modus"
+      },
+      "example": {
+        "en": "Heating",
+        "nl": "Verwarming"
+      }
+    }
+  ]
+}

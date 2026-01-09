@@ -10,6 +10,7 @@
   "getable": true,
   "setable": false,
   "uiComponent": "sensor",
+  "icon": "/assets/capabilities/energy.svg",
   "decimals": 2,
   "insights": true
 }

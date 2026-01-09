@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.3] - 2026-01-09
+
+### Added
+- New `operation_mode_text` capability showing human-readable mode (Off/Heating/Cooling/Hot Water)
+- Flow card trigger "When operation mode changes" with filter for specific modes
+- SVG icons for all custom capabilities (signals, pumps, temperatures, pressures, energy, etc.)
+
+### Fixed
+- `total_active_power` now correctly displays in kW instead of W
+
 ## [1.3.2] - 2026-01-06
 
 ### Fixed

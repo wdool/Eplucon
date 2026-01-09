@@ -38,6 +38,15 @@ class EpluconApp extends Homey.App {
         return false;
       });
     
+    // Operation mode changed trigger
+    this.homey.flow.getDeviceTriggerCard('operation_mode_changed')
+      .registerRunListener(async (args, state) => {
+        if (args.state === 'any') {
+          return true;
+        }
+        return state.mode_key === args.state;
+      });
+    
     this.log('Flow Cards registered');
   }
 

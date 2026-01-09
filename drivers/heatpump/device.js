@@ -9,6 +9,7 @@ class HeatPumpDevice extends Homey.Device {
     // Track previous values for flow triggers
     this._previousDg1 = null;
     this._previousWarmwater = null;
+    this._previousOperationMode = null;
     
     await this.restoreSession();
     
@@ -158,6 +159,32 @@ class HeatPumpDevice extends Homey.Device {
     this._previousWarmwater = boolValue;
   }
 
+  getOperationModeText(modeValue) {
+    const modeNum = parseInt(modeValue, 10);
+    const modeMap = {
+      0: { en: 'Off', nl: 'Uit', key: 'off' },
+      1: { en: 'Cooling', nl: 'Koeling', key: 'cooling' },
+      2: { en: 'Heating', nl: 'Verwarming', key: 'heating' },
+      3: { en: 'Hot Water', nl: 'Warm Water', key: 'hotwater' },
+      4: { en: 'Standby', nl: 'Stand-by', key: 'standby' }
+    };
+    return modeMap[modeNum] || { en: `Mode ${modeValue}`, nl: `Modus ${modeValue}`, key: 'unknown' };
+  }
+
+  async triggerOperationModeChanged(newValue) {
+    if (newValue === undefined || newValue === null) return;
+    
+    const modeStr = String(newValue);
+    const modeInfo = this.getOperationModeText(newValue);
+    
+    if (this._previousOperationMode !== null && this._previousOperationMode !== modeStr) {
+      this.log(`Operation mode changed: ${this._previousOperationMode} -> ${modeStr} (${modeInfo.en})`);
+      const triggerCard = this.homey.flow.getDeviceTriggerCard('operation_mode_changed');
+      await triggerCard.trigger(this, { mode: modeInfo.en }, { mode_key: modeInfo.key }).catch(this.error);
+    }
+    this._previousOperationMode = modeStr;
+  }
+
   async pollData() {
     try {
       const api = this.homey.app.api;
@@ -215,12 +242,15 @@ class HeatPumpDevice extends Homey.Device {
           'energy_usage': realtimeInfo.energy_usage,
           'import_energy': realtimeInfo.import_energy,
           'export_energy': realtimeInfo.export_energy,
-          'total_active_power': realtimeInfo.total_active_power,
+          'total_active_power': realtimeInfo.total_active_power ? realtimeInfo.total_active_power / 1000 : null,
           'spf': realtimeInfo.spf
         };
 
+        const modeInfo = this.getOperationModeText(realtimeInfo.operation_mode);
+        
         const stringCapabilities = {
           'operation_mode': realtimeInfo.operation_mode,
+          'operation_mode_text': modeInfo.en,
           'heating_mode': realtimeInfo.heating_mode,
           'heating_state': realtimeInfo.current_heating_state,
           'heating_pump_state': realtimeInfo.current_heating_pump_state
@@ -249,9 +279,10 @@ class HeatPumpDevice extends Homey.Device {
           await this.setBooleanCapability(capability, value);
         }
 
-        // Trigger flow cards for DG1 and hot water changes
+        // Trigger flow cards for DG1, hot water, and operation mode changes
         await this.triggerDg1Changed(realtimeInfo.dg1);
         await this.triggerHotwaterChanged(realtimeInfo.warmwater);
+        await this.triggerOperationModeChanged(realtimeInfo.operation_mode);
       }
 
       if (energyStats) {

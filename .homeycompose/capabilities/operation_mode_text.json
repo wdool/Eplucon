@@ -1,0 +1,12 @@
+{
+  "type": "string",
+  "title": {
+    "en": "Operation Mode",
+    "nl": "Bedrijfsmodus"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "icon": "/assets/capabilities/mode.svg",
+  "insights": true
+}
